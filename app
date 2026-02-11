@@ -189,7 +189,7 @@
             
             <div class="audio-section">
                 <div class="audio-box">
-                    <span class="audio-label">اسم الحرف</span>
+                    <span class="audio-label">اسم ونطق الحرف</span>
                     <button class="play-btn btn-color" onclick="playAudio('l1-audio')">🔊 Play</button>
                 </div>
                 <div class="audio-box">
