@@ -2,248 +2,300 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>َQ-kids</title>
+    <title>Q-kids Apple Style</title>
     <style>
-        /* تعريف الألوان المتغيرة للوضع العادي والليل */
         :root {
-            --bg-color: #f7f9fc;
-            --text-color: #333;
-            --card-bg: #ffffff;
-            --grid-btn-bg: #ffffff;
-            --box-bg: #f9f9f9;
-            --border-color: #eee;
-            --overlay-color: rgba(0,0,0,0.85);
+            /* خلفيات ملونة عشان يوضح تأثير الزجاج */
+            --bg-gradient: radial-gradient(circle at 50% 10%, #ebf4f5 0%, #b5c6e0 100%);
+            --text-color: #1d1d1f;
+            
+            /* سحر أبل للوضع النهاري */
+            --glass-bg: rgba(255, 255, 255, 0.25); /* شفافية عالية */
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --glass-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.1);
+            --card-glass: rgba(255, 255, 255, 0.55);
+            --blur-strength: 30px; /* قوة التغبيش */
+            --saturation: 180%; /* زيادة تشبع الألوان خلف الزجاج */
         }
 
-        /* ألوان الوضع الليلي */
         .dark-mode {
-            --bg-color: #121212;
-            --text-color: #f0f0f0;
-            --card-bg: #1e1e1e;
-            --grid-btn-bg: #2d2d2d;
-            --box-bg: #252525;
-            --border-color: #333;
-            --overlay-color: rgba(0,0,0,0.95);
+            --bg-gradient: radial-gradient(circle at 50% 10%, #1c1c1e 0%, #000000 100%);
+            --text-color: #f5f5f7;
+            
+            /* سحر أبل للوضع الليلي */
+            --glass-bg: rgba(30, 30, 30, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.3);
+            --card-glass: rgba(40, 40, 40, 0.65);
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-gradient);
             color: var(--text-color);
             margin: 0;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: background 0.3s, color 0.3s;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.5s ease;
         }
 
-        /* زر الدارك مود العائم */
+        /* دوائر ملونة في الخلفية لتعزيز شكل الزجاج */
+        .ambient-light {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none; overflow: hidden;
+        }
+        .orb {
+            position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.6;
+            animation: moveOrb 20s infinite alternate;
+        }
+        /* كرات ألوان تتحرك عشان الزجاج يعكسها */
+        .orb-1 { width: 300px; height: 300px; background: #ff9a9e; top: -50px; left: -50px; }
+        .orb-2 { width: 400px; height: 400px; background: #a18cd1; bottom: -100px; right: -50px; animation-delay: -5s; }
+        .orb-3 { width: 200px; height: 200px; background: #fad0c4; top: 40%; left: 40%; animation-delay: -10s; }
+
+        @keyframes moveOrb {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(30px, 50px); }
+        }
+
+        /* الحروف المبعثرة */
+        .bg-letters { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+        .bg-letter {
+            position: absolute; font-weight: 900; opacity: 0.2;
+            filter: blur(2px); animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            from { transform: translateY(110vh) rotate(0deg); }
+            to { transform: translateY(-10vh) rotate(360deg); }
+        }
+
+        /* زر الثيم */
         .theme-toggle {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: var(--card-bg);
-            border: 2px solid var(--border-color);
-            padding: 10px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            z-index: 2000;
+            position: fixed; top: 20px; left: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--blur-strength)) saturate(var(--saturation));
+            -webkit-backdrop-filter: blur(var(--blur-strength)) saturate(var(--saturation));
+            border: 1px solid var(--glass-border);
+            padding: 12px; border-radius: 50%;
+            cursor: pointer; font-size: 20px;
+            z-index: 2000; box-shadow: var(--glass-shadow);
+            transition: 0.3s;
+        }
+        .theme-toggle:hover { transform: scale(1.1); }
+
+        .main-title {
+            font-size: 4rem; font-weight: 800; letter-spacing: -1px;
+            margin-bottom: 40px; text-align: center; z-index: 10;
         }
 
-        h1 { margin-bottom: 30px; }
-
-        /* شبكة الحروف */
+        /* الشبكة */
         .alphabet-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
-            gap: 15px;
-            width: 100%;
-            max-width: 550px;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 16px; width: 100%; max-width: 650px; z-index: 10;
         }
 
+        /* ستايل أبل للأزرار */
         .letter-btn {
-            background: var(--grid-btn-bg);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            
             aspect-ratio: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 32px;
-            font-weight: bold;
-            border-radius: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            cursor: pointer;
-            transition: 0.2s;
-            color: inherit;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 32px; font-weight: 600;
+            border-radius: 22px; /* انحناء أبل المميز */
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative; overflow: hidden;
         }
 
-        .letter-btn:active { transform: scale(0.9); }
+        /* لمعة خفيفة عند التحويم */
+        .letter-btn::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .letter-btn:hover {
+            transform: scale(1.08);
+            background: rgba(255,255,255,0.4);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.2);
+        }
+        
+        .letter-btn:active { transform: scale(0.95); }
 
         /* النافذة المنبثقة */
         .overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: var(--overlay-color);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.3); /* خلفية معتمة خفيفة */
             backdrop-filter: blur(5px);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
         }
 
+        /* البطاقة الكبيرة بستايل أبل */
         .big-card {
-            background: var(--card-bg);
-            width: 90%;
-            max-width: 380px;
-            border-radius: 40px;
-            padding: 25px;
-            text-align: center;
-            position: relative;
-            animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            color: var(--text-color);
+            background: var(--card-glass);
+            backdrop-filter: blur(40px) saturate(180%); /* تغبيش عالي جداً */
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            
+            width: 85%; max-width: 380px;
+            border-radius: 32px; padding: 40px 25px;
+            text-align: center; position: relative;
+            animation: springPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        @keyframes zoomIn {
-            from { transform: scale(0.3); opacity: 0; }
+        @keyframes springPop {
+            from { transform: scale(0.8); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
 
         .close-btn {
-            position: absolute;
-            top: 20px; right: 25px;
-            font-size: 30px; cursor: pointer; color: #888;
+            position: absolute; top: 20px; right: 20px;
+            width: 30px; height: 30px; line-height: 30px;
+            background: rgba(128,128,128,0.2); border-radius: 50%;
+            font-size: 20px; cursor: pointer; color: var(--text-color);
+            transition: 0.2s;
         }
+        .close-btn:hover { background: rgba(128,128,128,0.4); }
 
-        .big-letter { font-size: 100px; margin: 10px 0; line-height: 1; }
+        .big-letter { font-size: 80px; margin: 10px 0; font-weight: 700; }
         
-        .char-img { width: 160px; height: 160px; object-fit: contain; margin: 20px auto; border-radius: 20px; }
-        
-        .word-title { font-size: 35px; font-weight: bold; margin: 5px 0; display: block; }
-
-        /* تنسيق خانات الصوت */
-        .audio-section {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin: 15px 0;
+        .char-img { 
+            width: 140px; height: 140px; object-fit: contain; margin: 10px 0; 
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
+            transition: transform 0.4s;
         }
+        .char-img:hover { transform: scale(1.1); }
 
+        .word-title { font-size: 30px; font-weight: 700; margin-bottom: 20px; display: block; }
+
+        /* أزرار الصوت */
         .audio-box {
-    background: var(--box-bg);
-    padding: 12px 18px;
-    border-radius: 18px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid var(--border-color);
-    flex-direction: row-reverse; /* هذا السطر سيجعل الزر يسار والنص يمين */
-}
-
-        .audio-label { font-size: 14px; font-weight: bold; color: #888; }
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(255, 255, 255, 0.3); /* أفتح قليلاً من البطاقة */
+            padding: 8px 15px; border-radius: 15px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            flex-direction: row-reverse;
+        }
+        
+        .dark-mode .audio-box { background: rgba(0,0,0,0.2); }
 
         .play-btn {
-            color: white; border: none;
-            padding: 8px 15px; border-radius: 50px;
-            cursor: pointer; font-size: 13px;
-            font-weight: bold;
+            border: none; padding: 8px 20px; border-radius: 20px;
+            color: #fff; font-weight: 600; cursor: pointer; font-size: 13px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        .main-title {
-    font-size: 3rem; /* تكبير حجم الخط */
-    font-weight: 900;
-    margin-bottom: 20px;
-    letter-spacing: 2px; /* مسافة بسيطة بين الأحرف */
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.1); /* ظل خفيف ليبرز الألوان */
-}
+        .audio-label { font-size: 13px; font-weight: 500; opacity: 0.7; }
 
-/* في الوضع الليلي نجعل الظل أفتح قليلاً ليعطي إضاءة للأحرف */
-.dark-mode .main-title {
-    text-shadow: 0 0 10px rgba(255,255,255,0.1);
-}
     </style>
 </head>
 <body>
 
+    <div class="ambient-light">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    
+    <div class="bg-letters" id="bgLetters"></div>
+
     <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
 
     <h1 class="main-title">
-    <span style="color: #FF5733;">Q</span>
-    <span style="color: #33FF57;">-</span>
-    <span style="color: #3357FF;">k</span>
-    <span style="color: #FF33A1;">i</span>
-    <span style="color: #F39C12;">d</span>
-    <span style="color: #9B59B6;">s</span>
-</h1>
+        <span style="color: #FF3B30;">Q</span><span style="color: #34C759;">-</span><span style="color: #007AFF;">k</span><span style="color: #FF2D55;">i</span><span style="color: #FF9500;">d</span><span style="color: #AF52DE;">s</span>
+    </h1>
 
     <div class="alphabet-grid" id="grid"></div>
 
     <div class="overlay" id="overlay">
         <div class="big-card">
-            <span class="close-btn" onclick="closeCard()">&times;</span>
+            <div class="close-btn" onclick="closeCard()">&times;</div>
             
             <h1 class="big-letter" id="displayLetter">A</h1>
             
-            <div class="audio-section">
-                <div class="audio-box">
-                    <span class="audio-label">اسم ونطق الحرف</span>
-                    <button class="play-btn btn-color" onclick="playAudio('l1-audio')">🔊 Play</button>
-                </div>
+            <div class="audio-box">
+                <span class="audio-label">الحرف</span>
+                <button class="play-btn btn-color" onclick="playAudio('l1-audio')">▶ Play</button>
+            </div>
+
             <img src="" alt="Image" id="displayImg" class="char-img">
             
             <span class="word-title" id="displayWord">Apple</span>
             
-            <div class="audio-section">
-                <div class="audio-box">
-                    <span class="audio-label">نطق الكلمة</span>
-                    <button class="play-btn btn-color" onclick="playAudio('w-audio')">🔊 Play</button>
-                </div>
+            <div class="audio-box">
+                <span class="audio-label">الكلمة</span>
+                <button class="play-btn btn-color" onclick="playAudio('w-audio')">▶ Play</button>
             </div>
 
             <audio id="l1-audio"></audio>
-            <audio id="l2-audio"></audio>
             <audio id="w-audio"></audio>
         </div>
     </div>
 
     <script>
-        // مصفوفة الحروف - ميكو ضع روابطك هنا
         const alphabet = [
-            { char: 'A a', word: 'Apple', color: '#FF5733', img: 'https://cdn-icons-png.flaticon.com/128/415/415733.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767749/1_rlndgq.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770666412/apple_www89q.mp3' },
-            { char: 'B b', word: 'Ball', color: '#2ECC71', img: 'https://cdn-icons-png.flaticon.com/128/18899/18899933.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767760/2_pvspvf.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770668865/ball_syqro0.mp3' },
-            { char: 'C c', word: 'Cat', color: '#3498DB', img: 'https://cdn-icons-png.flaticon.com/128/1998/1998592.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767767/3_prhbkt.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770668739/cat_fhowfj.mp3' },
-            { char: 'D d', word: 'Dog', color: '#9B59B6', img: 'https://cdn-icons-png.flaticon.com/128/1998/1998627.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767768/4_ymlhib.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770668741/dog_hrp9b5.mp3' },
-            { char: 'E e', word: 'Egg', color: '#F1C40F', img: 'https://cdn-icons-png.flaticon.com/128/532/532573.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767770/5_oqiufb.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770670816/egg_brq79x.mp3' },
-            { char: 'F f', word: 'Fish', color: '#E67E22', img: 'https://cdn-icons-png.flaticon.com/128/10507/10507711.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767771/6_wesx3s.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770670812/fish_o9xnbi.mp3' },
-            { char: 'G g', word: 'Goat', color: '#1ABC9C', img: 'https://cdn-icons-png.flaticon.com/128/3578/3578070.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767771/7_ya15em.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770712659/Goat_dnvdbc.mp3' },
-            { char: 'H h', word: 'Hat', color: '#34495E', img: 'https://cdn-icons-png.flaticon.com/128/1785/1785366.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767772/8_uboh9c.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770712659/Het_qo1skh.mp3' },
-            { char: 'I i', word: 'Ice cream', color: '#E74C3C', img: 'https://cdn-icons-png.flaticon.com/128/3250/3250484.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767774/9_e4vbtk.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770712660/ice_cream_rjztjk.mp3' },
-            { char: 'J j', word: 'Jet', color: '#27AE60', img: 'https://cdn-icons-png.flaticon.com/128/3857/3857534.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767748/10_jewnz5.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770712660/Jat_nrczfc.mp3' },
-            { char: 'K k', word: 'Key', color: '#2980B9', img: 'https://cdn-icons-png.flaticon.com/128/2647/2647388.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767748/11_q9iuq2.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713500/Key_qkyhye.mp3' },
-            { char: 'L l', word: 'Lion', color: '#D35400', img: 'https://cdn-icons-png.flaticon.com/128/12541/12541334.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767749/12_g2eo7u.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713500/Lion_txi4q4.mp3' },
-            { char: 'M m', word: 'Monkey', color: '#C0392B', img: 'https://cdn-icons-png.flaticon.com/128/1998/1998721.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767750/13_rrnexu.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713501/Monkey_qth80p.mp3' },
-            { char: 'N n', word: 'Nut', color: '#16A085', img: 'https://cdn-icons-png.flaticon.com/128/6268/6268679.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767749/14_e5bx1v.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713501/Nut_a2pavy.mp3' },
-            { char: 'O o', word: 'Orange', color: '#F39C12', img: 'https://cdn-icons-png.flaticon.com/128/1728/1728765.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767755/15_uxqepl.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713507/Orange_wrwtua.mp3' },
-            { char: 'P p', word: 'Panda', color: '#8E44AD', img: 'https://cdn-icons-png.flaticon.com/128/1471/1471260.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767756/16_altrqs.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713508/Panda_m3vqrf.mp3' },
-            { char: 'Q q', word: 'Quail', color: '#2C3E50', img: 'https://cdn-icons-png.flaticon.com/128/14436/14436960.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767756/17_no5xps.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713511/Quail_sh1fpy.mp3' },
-            { char: 'R r', word: 'Rose', color: '#E67E22', img: 'https://cdn-icons-png.flaticon.com/128/2926/2926754.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767757/18_gjhful.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713512/Rose_mkshni.mp3' },
-            { char: 'S s', word: 'Star', color: '#F1C40F', img: 'https://cdn-icons-png.flaticon.com/128/477/477406.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767758/19_glyfyn.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713512/Star_hb6utb.mp3' },
-            { char: 'T t', word: 'Toy', color: '#E74C3C', img: 'https://cdn-icons-png.flaticon.com/128/4287/4287470.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767761/20_hva6sw.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713517/Toy_p8k9h0.mp3' },
-            { char: 'U u', word: 'Umbrella', color: '#3498DB', img: 'https://cdn-icons-png.flaticon.com/128/490/490919.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767761/21_eqcip8.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713520/Umbrella_piju9y.mp3' },
-            { char: 'V v', word: 'Van', color: '#2ECC71', img: 'https://cdn-icons-png.flaticon.com/128/3063/3063823.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767762/22_r4fghe.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713520/Van_vr4bca.mp3' },
-            { char: 'W w', word: 'Whale', color: '#95A5A6', img: 'https://cdn-icons-png.flaticon.com/128/4971/4971976.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767762/23_ngmt5s.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713521/Whale_eaddrk.mp3' },
-            { char: 'X x', word: 'Xylophone', color: '#7F8C8D', img: 'https://cdn-icons-png.flaticon.com/128/2308/2308044.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767764/24_c7y7xs.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713524/Xylophone_ik8vc7.mp3' },
-            { char: 'Y y', word: 'Yak', color: '#D35400', img: 'https://cdn-icons-png.flaticon.com/128/11363/11363528.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767766/25_euk4je.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713527/Yak_m2yviu.mp3' },
-            { char: 'Z z', word: 'Zebra', color: '#2C3E50', img: 'https://cdn-icons-png.flaticon.com/128/5276/5276086.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767767/26_ahrv7x.mp4', l2: '', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713528/Zebra_i7kcdu.mp3' }
+            { char: 'A a', word: 'Apple', color: '#FF3B30', img: 'https://cdn-icons-png.flaticon.com/128/415/415733.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767749/1_rlndgq.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770666412/apple_www89q.mp3' },
+            { char: 'B b', word: 'Ball', color: '#34C759', img: 'https://cdn-icons-png.flaticon.com/128/18899/18899933.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767760/2_pvspvf.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770668865/ball_syqro0.mp3' },
+            { char: 'C c', word: 'Cat', color: '#007AFF', img: 'https://cdn-icons-png.flaticon.com/128/1998/1998592.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767767/3_prhbkt.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770668739/cat_fhowfj.mp3' },
+            { char: 'D d', word: 'Dog', color: '#AF52DE', img: 'https://cdn-icons-png.flaticon.com/128/1998/1998627.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767768/4_ymlhib.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770668741/dog_hrp9b5.mp3' },
+            { char: 'E e', word: 'Egg', color: '#FF9500', img: 'https://cdn-icons-png.flaticon.com/128/532/532573.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767770/5_oqiufb.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770670816/egg_brq79x.mp3' },
+            { char: 'F f', word: 'Fish', color: '#FF2D55', img: 'https://cdn-icons-png.flaticon.com/128/10507/10507711.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767771/6_wesx3s.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770670812/fish_o9xnbi.mp3' },
+            { char: 'G g', word: 'Goat', color: '#30B0C7', img: 'https://cdn-icons-png.flaticon.com/128/3578/3578070.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767771/7_ya15em.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770712659/Goat_dnvdbc.mp3' },
+            { char: 'H h', word: 'Hat', color: '#5856D6', img: 'https://cdn-icons-png.flaticon.com/128/1785/1785366.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767772/8_uboh9c.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770712659/Het_qo1skh.mp3' },
+            { char: 'I i', word: 'Ice cream', color: '#FF3B30', img: 'https://cdn-icons-png.flaticon.com/128/3250/3250484.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767774/9_e4vbtk.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770712660/ice_cream_rjztjk.mp3' },
+            { char: 'J j', word: 'Jet', color: '#34C759', img: 'https://cdn-icons-png.flaticon.com/128/3857/3857534.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767748/10_jewnz5.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770712660/Jat_nrczfc.mp3' },
+            { char: 'K k', word: 'Key', color: '#007AFF', img: 'https://cdn-icons-png.flaticon.com/128/2647/2647388.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767748/11_q9iuq2.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713500/Key_qkyhye.mp3' },
+            { char: 'L l', word: 'Lion', color: '#FF9500', img: 'https://cdn-icons-png.flaticon.com/128/12541/12541334.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767749/12_g2eo7u.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713500/Lion_txi4q4.mp3' },
+            { char: 'M m', word: 'Monkey', color: '#FF2D55', img: 'https://cdn-icons-png.flaticon.com/128/1998/1998721.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767750/13_rrnexu.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713501/Monkey_qth80p.mp3' },
+            { char: 'N n', word: 'Nut', color: '#30B0C7', img: 'https://cdn-icons-png.flaticon.com/128/6268/6268679.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767749/14_e5bx1v.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713501/Nut_a2pavy.mp3' },
+            { char: 'O o', word: 'Orange', color: '#FF9500', img: 'https://cdn-icons-png.flaticon.com/128/1728/1728765.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767755/15_uxqepl.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713507/Orange_wrwtua.mp3' },
+            { char: 'P p', word: 'Panda', color: '#AF52DE', img: 'https://cdn-icons-png.flaticon.com/128/1471/1471260.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767756/16_altrqs.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713508/Panda_m3vqrf.mp3' },
+            { char: 'Q q', word: 'Quail', color: '#5856D6', img: 'https://cdn-icons-png.flaticon.com/128/14436/14436960.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767756/17_no5xps.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713511/Quail_sh1fpy.mp3' },
+            { char: 'R r', word: 'Rose', color: '#FF3B30', img: 'https://cdn-icons-png.flaticon.com/128/2926/2926754.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767757/18_gjhful.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713512/Rose_mkshni.mp3' },
+            { char: 'S s', word: 'Star', color: '#FF9500', img: 'https://cdn-icons-png.flaticon.com/128/477/477406.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767758/19_glyfyn.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713512/Star_hb6utb.mp3' },
+            { char: 'T t', word: 'Toy', color: '#FF2D55', img: 'https://cdn-icons-png.flaticon.com/128/4287/4287470.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767761/20_hva6sw.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713517/Toy_p8k9h0.mp3' },
+            { char: 'U u', word: 'Umbrella', color: '#007AFF', img: 'https://cdn-icons-png.flaticon.com/128/490/490919.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767761/21_eqcip8.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713520/Umbrella_piju9y.mp3' },
+            { char: 'V v', word: 'Van', color: '#34C759', img: 'https://cdn-icons-png.flaticon.com/128/3063/3063823.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767762/22_r4fghe.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713520/Van_vr4bca.mp3' },
+            { char: 'W w', word: 'Whale', color: '#8E8E93', img: 'https://cdn-icons-png.flaticon.com/128/4971/4971976.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767762/23_ngmt5s.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713521/Whale_eaddrk.mp3' },
+            { char: 'X x', word: 'Xylophone', color: '#636366', img: 'https://cdn-icons-png.flaticon.com/128/2308/2308044.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767764/24_c7y7xs.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713524/Xylophone_ik8vc7.mp3' },
+            { char: 'Y y', word: 'Yak', color: '#FF9500', img: 'https://cdn-icons-png.flaticon.com/128/11363/11363528.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767766/25_euk4je.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713527/Yak_m2yviu.mp3' },
+            { char: 'Z z', word: 'Zebra', color: '#1C1C1E', img: 'https://cdn-icons-png.flaticon.com/128/5276/5276086.png', l1: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770767767/26_ahrv7x.mp4', w: 'https://res.cloudinary.com/dk9bucroj/video/upload/v1770713528/Zebra_i7kcdu.mp3' }
         ];
+
+        // الحروف الطائرة في الخلفية
+        const bgContainer = document.getElementById('bgLetters');
+        const colors = ['#FF3B30', '#34C759', '#007AFF', '#FF2D55', '#FF9500', '#AF52DE'];
+
+        function createFloatingLetters() {
+            bgContainer.innerHTML = '';
+            for(let i=0; i<25; i++) {
+                const span = document.createElement('span');
+                span.className = 'bg-letter';
+                span.innerText = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+                span.style.left = Math.random() * 95 + 'vw';
+                span.style.color = colors[Math.floor(Math.random() * colors.length)];
+                span.style.fontSize = (Math.random() * 60 + 30) + 'px';
+                span.style.animationDuration = (Math.random() * 10 + 15) + 's'; // حركة أبطأ وأكثر سلاسة
+                span.style.animationDelay = (Math.random() * 10) + 's';
+                bgContainer.appendChild(span);
+            }
+        }
+        createFloatingLetters();
 
         const grid = document.getElementById('grid');
         const overlay = document.getElementById('overlay');
 
-        // بناء الشبكة
         alphabet.forEach(item => {
             const btn = document.createElement('div');
             btn.className = 'letter-btn';
@@ -257,10 +309,8 @@
             document.getElementById('displayLetter').innerText = data.char;
             document.getElementById('displayLetter').style.color = data.color;
             document.getElementById('displayWord').innerText = data.word;
-            document.getElementById('displayImg').src = data.img || 'https://via.placeholder.com/150?text=Image';
-            
+            document.getElementById('displayImg').src = data.img;
             document.getElementById('l1-audio').src = data.l1;
-            document.getElementById('l2-audio').src = data.l2;
             document.getElementById('w-audio').src = data.w;
 
             const btns = document.querySelectorAll('.btn-color');
@@ -269,36 +319,23 @@
             overlay.style.display = 'flex';
         }
 
-        function closeCard() {
-            overlay.style.display = 'none';
-            document.querySelectorAll('audio').forEach(a => a.pause());
+        function closeCard() { 
+            overlay.style.display = 'none'; 
+            document.querySelectorAll('audio').forEach(a => a.pause()); 
         }
 
         function playAudio(id) {
             const audio = document.getElementById(id);
-            if (audio.src && audio.src !== window.location.href) {
-                audio.currentTime = 0;
-                audio.play();
-            } else {
-                alert("يرجى إضافة الرابط الصوتي في الكود");
-            }
+            if (audio.src) { audio.currentTime = 0; audio.play(); }
         }
 
-        // وظيفة الدارك مود
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
-            const btn = document.getElementById('themeBtn');
-            if (document.body.classList.contains('dark-mode')) {
-                btn.innerText = '☀️';
-            } else {
-                btn.innerText = '🌙';
-            }
+            const isDark = document.body.classList.contains('dark-mode');
+            document.getElementById('themeBtn').innerText = isDark ? '☀️' : '🌙';
         }
 
         window.onclick = (e) => { if(e.target == overlay) closeCard(); }
     </script>
 </body>
-
 </html>
-
-
